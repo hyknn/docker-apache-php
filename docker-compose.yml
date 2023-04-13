@@ -1,0 +1,45 @@
+services:
+    #PHP Service
+    php-apache:
+        build:
+            context: .
+            dockerfile: docker/php/Dockerfile
+        volumes:
+            - ./docker/test:/var/www/html/
+        ports:
+            - 80:80
+        links:
+            - mysql
+        networks:
+            - internal
+
+    mysql:
+        image: mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: database
+            MYSQL_PASSWORD: password
+        ports:
+            - 3306:3306
+        # Autoload Database Dump
+        #volumes:
+            #- ./docker/db:/docker-entrypoint-initdb.d
+        networks:
+            - internal
+    
+    phpmyadmin:
+        image: phpmyadmin
+        environment:
+            PMA_HOST: mysql
+            MYSQL_ROOT_PASSWORD: root
+        ports:
+            - 9000:80
+        links:
+            - mysql
+        networks:
+            - internal
+
+#Docker Networks
+networks:
+    internal:
+        driver: bridge
