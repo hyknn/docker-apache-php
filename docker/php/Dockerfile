@@ -33,6 +33,7 @@ RUN docker-php-ext-install pdo_mysql \
     exif \
     pcntl \
     gd \
+    intl \
     mysqli && docker-php-ext-enable mysqli
 
 # Install composer
